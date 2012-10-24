@@ -3,21 +3,9 @@ require 'redis'
 require 'fragmenter/version'
 
 module Fragmenter
-  DEFAULTS = {
-    log_level: 4
-  }
-
-  def self.options
-    @options ||= DEFAULTS
-  end
-
-  def self.options=(options)
-    @options = options
-  end
-
   def self.logger
     @logger ||= Logger.new(STDOUT).tap do |logger|
-      logger.level = options[:log_level]
+      logger.level = Logger::INFO
     end
   end
 

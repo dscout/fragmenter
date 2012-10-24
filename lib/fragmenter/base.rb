@@ -23,10 +23,5 @@ module Fragmenter
     def as_json
       engine.meta.merge('fragments' => engine.fragments)
     end
-
-    private
-
-    def stringify_keys(hash)
-    end
   end
 end
