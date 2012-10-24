@@ -1,4 +1,4 @@
-Copyright (c) 2012 Parker Selbert
+Copyright (c) 2012 Dscout, Inc
 
 MIT License
 
