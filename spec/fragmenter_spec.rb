@@ -31,4 +31,32 @@ describe Fragmenter do
       Fragmenter.redis.should be(redis)
     end
   end
+
+  describe '.expiration' do
+    it 'defaults expiration to one day' do
+      Fragmenter.expiration.should == 86400
+    end
+  end
+
+  describe '.expiration=' do
+    it 'stoires the expiration value on the module' do
+      Fragmenter.expiration = 10000
+      Fragmenter.expiration.should eq(10000)
+    end
+  end
+
+  describe '.configure' do
+    let(:redis)  { mock(:redis) }
+    let(:logger) { mock(:logger) }
+
+    it 'allows customization via passing a block' do
+      Fragmenter.configure do |config|
+        config.redis  = redis
+        config.logger = logger
+      end
+
+      Fragmenter.redis.should == redis
+      Fragmenter.logger.should == logger
+    end
+  end
 end
