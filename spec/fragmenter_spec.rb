@@ -1,6 +1,12 @@
 require 'fragmenter'
 
 describe Fragmenter do
+  after do
+    Fragmenter.redis      = nil
+    Fragmenter.logger     = nil
+    Fragmenter.expiration = nil
+  end
+
   describe '.logger' do
     it 'attempts to instantiate a standard logger to STDOUT' do
       Fragmenter.logger.should be_instance_of(Logger)
