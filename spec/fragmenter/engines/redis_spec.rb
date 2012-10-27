@@ -84,14 +84,14 @@ describe Fragmenter::Engines::Redis do
     end
   end
 
-  describe '#fragment_numbers' do
+  describe '#fragments' do
     before do
       engine.store(blob_2, number: 3, total: 30)
       engine.store(blob_1, number: 1, total: 30)
     end
 
     it 'returns an array of the stored fragment indecies' do
-      engine.fragment_numbers.should eq(['01', '03'])
+      engine.fragments.should eq(['01', '03'])
     end
   end
 

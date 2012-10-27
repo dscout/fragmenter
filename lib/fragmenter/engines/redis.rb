@@ -33,7 +33,7 @@ module Fragmenter
         redis.hgetall meta_key
       end
 
-      def fragment_numbers
+      def fragments
         redis.hkeys(store_key).sort
       end
 
@@ -42,7 +42,7 @@ module Fragmenter
       end
 
       def rebuild
-        redis.hmget(store_key, *fragment_numbers).join('')
+        redis.hmget(store_key, *fragments).join('')
       rescue ::Redis::CommandError
         raise Fragmenter::RebuildError
       end
