@@ -3,7 +3,7 @@
 Fragmenter stores and rebuilds binary data in a distributed fashion. The only
 engine currently provided is Redis.
 
-# Why?
+## Why Fragments?
 
 It alleviates the problems posed by uploading large blocks of data from slow
 clients, notably mobile apps, by allowing the device to send multiple smaller
