@@ -9,6 +9,10 @@ describe Fragmenter::Engines::Redis do
 
   subject(:engine) { described_class.new(fragmenter) }
 
+  before do
+    Fragmenter.logger = Logger.new('/dev/null')
+  end
+
   after do
     redis.del engine.store_key, engine.meta_key
   end

@@ -3,11 +3,13 @@ require 'fragmenter/fragment'
 module Fragmenter
   module Engines
     class Redis
-      attr_reader :fragmenter, :options
+      extend Forwardable
 
-      def defaults
-        { expiration: 60 * 60 * 24 }
-      end
+      delegate expiration: Fragmenter
+      delegate logger:     Fragmenter
+      delegate redis:      Fragmenter
+
+      attr_reader :fragmenter
 
       def initialize(fragmenter)
         @fragmenter = fragmenter
@@ -53,23 +55,27 @@ module Fragmenter
 
       private
 
-      def expiration
-        Fragmenter.expiration
-      end
-
-      def redis
-        Fragmenter.redis
-      end
-
       def persist_fragment(fragment)
-        redis.multi do
-          redis.hset store_key, fragment.padded_number, fragment.blob
-          redis.hset meta_key, :content_type, fragment.content_type
-          redis.hset meta_key, :total, fragment.total
+        benchmark_persistence(fragment) do
+          redis.multi do
+            redis.hset store_key, fragment.padded_number, fragment.blob
+            redis.hset meta_key, :content_type, fragment.content_type
+            redis.hset meta_key, :total, fragment.total
 
-          redis.expire store_key, expiration
-          redis.expire meta_key, expiration
+            redis.expire store_key, expiration
+            redis.expire meta_key, expiration
+          end
         end
+      end
+
+      def benchmark_persistence(fragment, &block)
+        logger.info "Fragmenter: Storing #{fragment.number}/#{fragment.total}..."
+        start_time = Time.now
+
+        yield
+
+        end_time = Time.now
+        logger.info "Fragmenter: Stored (#{end_time - start_time}) #{fragment.number}/#{fragment.total} #{fragment.blob.size}bytes"
       end
     end
   end
