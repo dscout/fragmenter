@@ -11,9 +11,10 @@ Gem::Specification.new do |gem|
   gem.description   = %q{Fragmentize and rebuild data}
   gem.summary       = %q{Fragmentize and rebuild data}
 
+  gem.homepage      = 'https://github.com/dscout/fragmenter'
+
   gem.files         = `git ls-files`.split($/)
-  gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
-  gem.test_files    = gem.files.grep(%r{^(spec|features)/})
+  gem.test_files    = gem.files.grep(%r{^(spec)/})
   gem.require_paths = ['lib']
 
   gem.add_dependency 'redis', '~> 3.0.0'
