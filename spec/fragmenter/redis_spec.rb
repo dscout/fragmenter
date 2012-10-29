@@ -1,7 +1,7 @@
 require 'fragmenter'
-require 'fragmenter/engines/redis'
+require 'fragmenter/redis'
 
-describe Fragmenter::Engines::Redis do
+describe Fragmenter::Redis do
   let(:blob_1)     { '00010110' }
   let(:blob_2)     { '11101110' }
   let(:fragmenter) { mock(:fragmenter, key: 'abcdefg') }

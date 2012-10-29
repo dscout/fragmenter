@@ -2,6 +2,7 @@ require 'logger'
 require 'redis'
 require 'fragmenter/version'
 require 'fragmenter/base'
+require 'fragmenter/redis'
 
 module Fragmenter
   class RebuildError < StandardError; end
@@ -22,7 +23,7 @@ module Fragmenter
   end
 
   def self.redis
-    @redis ||= Redis.new
+    @redis ||= ::Redis.new
   end
 
   def self.redis=(redis)
