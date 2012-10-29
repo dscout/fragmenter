@@ -5,9 +5,6 @@ require 'fragmenter/base'
 require 'fragmenter/redis'
 
 module Fragmenter
-  class RebuildError < StandardError; end
-  class StoreError   < StandardError; end
-
   def self.configure(&block)
     yield self
   end

@@ -25,9 +25,11 @@ module Fragmenter
     def store(blob, options)
       fragment = Fragmenter::Fragment.new(blob, options)
 
-      raise Fragmenter::StoreError unless fragment.valid?
-
-      persist_fragment(fragment)
+      if fragment.valid?
+        persist_fragment(fragment)
+      else
+        false
+      end
     end
 
     def meta
@@ -43,9 +45,13 @@ module Fragmenter
     end
 
     def rebuild
-      redis.hmget(store_key, *fragments).join('')
+      benchmark_rebuilding do
+        redis.hmget(store_key, *fragments).join('')
+      end
     rescue ::Redis::CommandError
-      raise Fragmenter::RebuildError
+      log 'Failure rebuilding, most likely there are no fragments to rebuild'
+
+      ''
     end
 
     def clean!
@@ -53,6 +59,10 @@ module Fragmenter
     end
 
     private
+
+    def log(message)
+      logger.info "Fragmenter: #{message}"
+    end
 
     def persist_fragment(fragment)
       benchmark_persistence(fragment) do
@@ -68,13 +78,25 @@ module Fragmenter
     end
 
     def benchmark_persistence(fragment, &block)
-      logger.info "Fragmenter: Storing #{fragment.number}/#{fragment.total}..."
+      log %(Storing #{fragment.number}/#{fragment.total}...)
       start_time = Time.now
 
       yield
 
       end_time = Time.now
-      logger.info "Fragmenter: Stored (#{end_time - start_time}) #{fragment.number}/#{fragment.total} #{fragment.blob.size}bytes"
+      log %(Stored (#{end_time - start_time}) #{fragment.number}/#{fragment.total} #{fragment.blob.size} bytes)
+    end
+
+    def benchmark_rebuilding(&block)
+      log %(Rebuilding #{fragments.length} fragments...)
+      start_time = Time.now
+
+      rebuilt = yield
+
+      end_time = Time.now
+      log %(Rebuilt (#{end_time - start_time}) #{fragments.length} fragments #{rebuilt.size} bytes)
+
+      rebuilt
     end
   end
 end

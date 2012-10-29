@@ -11,7 +11,7 @@ module Fragmenter
     delegate rebuild:   :engine
     delegate store:     :engine
 
-    def initialize(object, engine_class = Fragmenter::Engines::Redis)
+    def initialize(object, engine_class = Fragmenter::Redis)
       @object = object
       @engine = engine_class.new(self)
     end

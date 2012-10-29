@@ -32,27 +32,26 @@ describe Fragmenter::Redis do
 
   describe '#store' do
     it 'does not store empty blobs' do
-      -> { engine.store('', number: 1, total: 2) }.
-        should raise_error(Fragmenter::StoreError)
+      engine.store('', number: 1, total: 2).should be_false
     end
 
     it 'writes the provided blob to the fragmenter key and the provided number' do
       engine.store(blob_1, number: 1, total: 48)
 
-      redis.hget(fragmenter.key, '01').should eq(blob_1)
+      redis.hget(fragmenter.key, '01').should == blob_1
     end
 
     it 'overwrites existing data at the key + number location' do
       engine.store(blob_1, number: 1, total: 48)
       engine.store(blob_2, number: 1, total: 48)
 
-      redis.hget(fragmenter.key, '01').should eq(blob_2)
+      redis.hget(fragmenter.key, '01').should == blob_2
     end
 
     it 'sets the fragment to expire' do
       engine.store(blob_1, number: 1, total: 48)
 
-      redis.ttl(engine.store_key).should eq(Fragmenter.expiration)
+      redis.ttl(engine.store_key).should == Fragmenter.expiration
     end
 
     it 'stores meta-data in a spearate key' do
@@ -64,19 +63,19 @@ describe Fragmenter::Redis do
     it 'sets the meta to expire' do
       engine.store(blob_1, number: 1, total: 48)
 
-      redis.ttl(engine.meta_key).should eq(Fragmenter.expiration)
+      redis.ttl(engine.meta_key).should == Fragmenter.expiration
     end
 
     it 'defaults the stored content-type to application/octet-stream' do
       subject.store(blob_1, number: 1, total: 48)
 
-      redis.hget(engine.meta_key, :content_type).should eq('application/octet-stream')
+      redis.hget(engine.meta_key, :content_type).should == 'application/octet-stream'
     end
   end
 
   describe '#meta' do
     it 'returns an empty hash when nothing has been stored' do
-      engine.meta.should eq({})
+      engine.meta.should == {}
     end
 
     it 'returns the accumulated metadata when data has been stored' do
@@ -89,13 +88,21 @@ describe Fragmenter::Redis do
   end
 
   describe '#fragments' do
-    before do
-      engine.store(blob_2, number: 3, total: 30)
-      engine.store(blob_1, number: 1, total: 30)
+    context 'without any fragments' do
+      it 'returns an empty array' do
+        engine.fragments.should == []
+      end
     end
 
-    it 'returns an array of the stored fragment indecies' do
-      engine.fragments.should eq(['01', '03'])
+    context 'when fragments have been stored' do
+      before do
+        engine.store(blob_2, number: 3, total: 30)
+        engine.store(blob_1, number: 1, total: 30)
+      end
+
+      it 'returns an array of the stored fragment indecies' do
+        engine.fragments.should == ['01', '03']
+      end
     end
   end
 
@@ -121,13 +128,13 @@ describe Fragmenter::Redis do
     end
 
     it 'returns the aggregated values from all stored fragments' do
-      engine.rebuild.should eq([blob_1, blob_2].join(''))
+      engine.rebuild.should == [blob_1, blob_2].join('')
     end
 
-    it 'raises a rebuild error when fragments are missing' do
+    it 'returns nothing when no fragments are present' do
       redis.del engine.store_key
 
-      -> { engine.rebuild }.should raise_error(Fragmenter::RebuildError)
+      engine.rebuild.should == ''
     end
   end
 
