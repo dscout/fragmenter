@@ -8,11 +8,11 @@ module Fragmenter
     end
 
     def number
-      @number ||= options[:number] || 1
+      @number ||= options.fetch(:number, 1).to_i
     end
 
     def total
-      @total ||= options[:total] || 1
+      @total ||= options.fetch(:total, 1).to_i
     end
 
     def content_type
