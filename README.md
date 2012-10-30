@@ -1,5 +1,7 @@
 # Fragmenter
 
+travis-placeholder
+
 Fragmenter stores and rebuilds binary data in a distributed fashion. The only
 engine currently provided is Redis.
 
