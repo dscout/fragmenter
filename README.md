@@ -1,6 +1,6 @@
-# Fragmenter
+[![Build Status](https://secure.travis-ci.org/dscout/fragmenter.png)](http://travis-ci.org/dscout/fragmenter)
 
-travis-placeholder
+# Fragmenter
 
 Fragmenter stores and rebuilds binary data in a distributed fashion. The only
 engine currently provided is Redis.
