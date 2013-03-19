@@ -10,7 +10,6 @@ describe Fragmenter do
   describe '.logger' do
     it 'attempts to instantiate a standard logger to STDOUT' do
       Fragmenter.logger.should be_instance_of(Logger)
-      Fragmenter.logger.level.should == Logger::INFO
     end
   end
 
