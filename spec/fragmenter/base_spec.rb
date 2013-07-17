@@ -1,9 +1,9 @@
 require 'fragmenter/base'
 
 describe Fragmenter::Base do
-  let(:object)       { mock('object', id: 1001) }
-  let(:engine_class) { mock('engine_class', new: engine) }
-  let(:engine)       { mock('engine') }
+  let(:object)       { double(:object, id: 1001) }
+  let(:engine_class) { double(:engine_class, new: engine) }
+  let(:engine)       { double(:engine) }
 
   subject { described_class.new(object, engine_class) }
 

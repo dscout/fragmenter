@@ -4,7 +4,7 @@ require 'fragmenter/redis'
 describe Fragmenter::Redis do
   let(:blob_1)     { '00010110' }
   let(:blob_2)     { '11101110' }
-  let(:fragmenter) { mock(:fragmenter, key: 'abcdefg') }
+  let(:fragmenter) { double(:fragmenter, key: 'abcdefg') }
   let(:redis)      { Fragmenter.redis }
 
   subject(:engine) { described_class.new(fragmenter) }

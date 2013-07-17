@@ -15,7 +15,7 @@ describe Fragmenter do
 
   describe '.logger=' do
     it 'stores the logger instance on the module' do
-      logger = mock(:logger)
+      logger = double(:logger)
 
       Fragmenter.logger = logger
       Fragmenter.logger.should be(logger)
@@ -30,7 +30,7 @@ describe Fragmenter do
 
   describe '.redis=' do
     it 'stores the redis instance on the module' do
-      redis = mock(:redis)
+      redis = double(:redis)
 
       Fragmenter.redis = redis
       Fragmenter.redis.should be(redis)
@@ -51,8 +51,8 @@ describe Fragmenter do
   end
 
   describe '.configure' do
-    let(:redis)  { mock(:redis) }
-    let(:logger) { mock(:logger) }
+    let(:redis)  { double(:redis) }
+    let(:logger) { double(:logger) }
 
     it 'allows customization via passing a block' do
       Fragmenter.configure do |config|
