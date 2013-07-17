@@ -4,14 +4,17 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'fragmenter/version'
 
 Gem::Specification.new do |gem|
-  gem.name          = 'fragmenter'
-  gem.version       = Fragmenter::VERSION
-  gem.authors       = ['Parker Selbert']
-  gem.email         = ['parker@sorentwo.com']
-  gem.description   = %q{Fragmentize and rebuild data}
-  gem.summary       = %q{Fragmentize and rebuild data}
-
-  gem.homepage      = 'https://github.com/dscout/fragmenter'
+  gem.name         = 'fragmenter'
+  gem.version      = Fragmenter::VERSION
+  gem.authors      = ['Parker Selbert']
+  gem.email        = ['parker@sorentwo.com']
+  gem.homepage     = 'https://github.com/dscout/fragmenter'
+  gem.description  = %q{Fragmentize and rebuild data}
+  gem.summary      = <<-SUMMARY
+    Multipart upload support backed by Redis. Fragmenter handles storing
+    multiple parts of a larger binary and rebuilding it back into the original
+    after all parts have been stored.
+  SUMMARY
 
   gem.files         = `git ls-files`.split($/)
   gem.test_files    = gem.files.grep(%r{^(spec)/})
@@ -19,5 +22,5 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'redis', '~> 3.0.0'
 
-  gem.add_development_dependency 'rspec', '~> 2.11.0'
+  gem.add_development_dependency 'rspec', '~> 2.14.0'
 end
