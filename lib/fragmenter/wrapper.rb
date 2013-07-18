@@ -1,5 +1,5 @@
 module Fragmenter
-  class Base
+  class Wrapper
     extend Forwardable
 
     attr_reader :object, :engine

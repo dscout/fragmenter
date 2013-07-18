@@ -1,37 +1,39 @@
 require 'logger'
 require 'redis'
-require 'fragmenter/version'
-require 'fragmenter/base'
 require 'fragmenter/redis'
+require 'fragmenter/version'
+require 'fragmenter/wrapper'
 
 module Fragmenter
-  def self.configure(&block)
-    yield self
-  end
-
-  def self.logger
-    @logger ||= Logger.new(STDOUT).tap do |logger|
-      logger.level = Logger::INFO
+  class << self
+    def configure(&block)
+      yield self
     end
-  end
 
-  def self.logger=(logger)
-    @logger = logger
-  end
+    def logger
+      @logger ||= Logger.new(STDOUT).tap do |logger|
+        logger.level = Logger::INFO
+      end
+    end
 
-  def self.redis
-    @redis ||= ::Redis.new
-  end
+    def logger=(logger)
+      @logger = logger
+    end
 
-  def self.redis=(redis)
-    @redis = redis
-  end
+    def redis
+      @redis ||= ::Redis.new
+    end
 
-  def self.expiration=(expiration)
-    @expiration = expiration
-  end
+    def redis=(redis)
+      @redis = redis
+    end
 
-  def self.expiration
-    @expiration || 60 * 60 * 24
+    def expiration=(expiration)
+      @expiration = expiration
+    end
+
+    def expiration
+      @expiration || 60 * 60 * 24
+    end
   end
 end

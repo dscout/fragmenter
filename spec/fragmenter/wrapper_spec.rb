@@ -1,11 +1,11 @@
-require 'fragmenter/base'
+require 'fragmenter/wrapper'
 
-describe Fragmenter::Base do
+describe Fragmenter::Wrapper do
   let(:object)       { double(:object, id: 1001) }
   let(:engine_class) { double(:engine_class, new: engine) }
   let(:engine)       { double(:engine) }
 
-  subject(:base) { Fragmenter::Base.new(object, engine_class) }
+  subject(:base) { Fragmenter::Wrapper.new(object, engine_class) }
 
   describe '#key' do
     it 'composes a key from the object class and id value' do
