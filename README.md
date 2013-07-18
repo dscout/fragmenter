@@ -61,10 +61,8 @@ provided `Fragmenter::Controller` module into any controller you wish to have
 process uploads:
 
 ```ruby
-require 'fragmenter/controller'
-
 class UploadControler < ApplicationController
-  include Fragmenter::Controller
+  include Fragmenter::Rails::Controller
 
   private
 
@@ -81,23 +79,26 @@ instance of the `Avatar` model, which could look something like this:
 
 ```ruby
 class Avatar < ActiveRecord::Base
-  include Fragmenter::Fragmentable
-
-  def fragmenter
-    @fragmenter ||= Fragmenter.new(self)
-  end
-
-  def store_fragment(blob, headers)
-    fragmenter.store(blob, headers)
-  end
+  include Fragmenter::Rails::Model
 
   def rebuild_fragments
     self.avatar = Fragmenter::DummyIO.new(fragmenter.rebuild).tap do |io|
       io.content_type = fragmenter.meta['content_type']
     end
+
+    save!
   end
 end
 ```
+
+You **must** provide a concrete `rebuild_fragments` method that will perform
+rebuilding, saving, persisting etc. Without overriding `rebuild_fragments` a
+`Fragmenter::AbstractMethodError` will be raised when storage is complete and
+it attempts to rebuild.
+
+The example above synchronous storage using a mounted CarrierWave style
+uploader. You may want to perform rebuilding with a background worker instead
+to keep response times speedy.
 
 After you have configured your routes to map `show`, `update` and `destroy` to
 the uploads controller:

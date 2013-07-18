@@ -3,6 +3,8 @@ require 'redis'
 require 'fragmenter/redis'
 require 'fragmenter/version'
 require 'fragmenter/wrapper'
+require 'fragmenter/rails/controller'
+require 'fragmenter/rails/model'
 
 module Fragmenter
   class << self
