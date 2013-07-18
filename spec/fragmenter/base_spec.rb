@@ -5,11 +5,11 @@ describe Fragmenter::Base do
   let(:engine_class) { double(:engine_class, new: engine) }
   let(:engine)       { double(:engine) }
 
-  subject { described_class.new(object, engine_class) }
+  subject(:base) { Fragmenter::Base.new(object, engine_class) }
 
   describe '#key' do
     it 'composes a key from the object class and id value' do
-      subject.key.should match(/[a-z]+-\d+/)
+      base.key.should match(/[a-z]+-\d+/)
     end
   end
 
@@ -20,12 +20,12 @@ describe Fragmenter::Base do
     it 'delegates #store to the storage engine' do
       engine.should_receive(:store).with(blob, headers)
 
-      subject.store(blob, headers)
+      base.store(blob, headers)
     end
 
     it 'delegates #fragments to the storage engine' do
       engine.should_receive(:fragments)
-      subject.fragments
+      base.fragments
     end
   end
 
@@ -34,7 +34,7 @@ describe Fragmenter::Base do
       engine.stub('meta' => { 'content_type' => 'application/octet-stream' },
                   'fragments' => ['1', '2'])
 
-      subject.as_json.tap do |json|
+      base.as_json.tap do |json|
         json.should have_key('content_type')
         json.should have_key('fragments')
       end

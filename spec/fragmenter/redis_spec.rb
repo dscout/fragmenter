@@ -7,7 +7,7 @@ describe Fragmenter::Redis do
   let(:fragmenter) { double(:fragmenter, key: 'abcdefg') }
   let(:redis)      { Fragmenter.redis }
 
-  subject(:engine) { described_class.new(fragmenter) }
+  subject(:engine) { Fragmenter::Redis.new(fragmenter) }
 
   before do
     Fragmenter.logger = Logger.new('/dev/null')
