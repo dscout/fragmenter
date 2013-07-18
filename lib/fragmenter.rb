@@ -5,6 +5,9 @@ require 'fragmenter/version'
 require 'fragmenter/wrapper'
 require 'fragmenter/rails/controller'
 require 'fragmenter/rails/model'
+require 'fragmenter/services/uploader'
+require 'fragmenter/services/storer'
+require 'fragmenter/validators/checksum_validator'
 
 module Fragmenter
   class << self

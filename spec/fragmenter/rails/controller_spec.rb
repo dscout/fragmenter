@@ -49,11 +49,10 @@ describe Fragmenter::Rails::Controller do
     it 'stores the request body' do
       resource   = Resource.new(100)
       controller = UploadController.new(resource)
-      uploader   = double(:uploader, store: true)
+      uploader   = double(:uploader, store: true, complete?: false)
 
       controller.stub(:render)
       controller.stub(uploader: uploader)
-      resource.fragmenter.stub(complete?: false)
 
       controller.update
 
@@ -67,11 +66,10 @@ describe Fragmenter::Rails::Controller do
     it 'renders error messages if storage fails' do
       resource   = Resource.new(100)
       controller = UploadController.new(resource)
-      uploader   = double(:uploader, store: false, errors: [])
+      uploader   = double(:uploader, store: false, errors: [], complete?: false)
 
       controller.stub(:render)
       controller.stub(uploader: uploader)
-      resource.fragmenter.stub(complete?: false)
 
       controller.update
 

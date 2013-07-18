@@ -43,7 +43,7 @@ module Fragmenter
       end
 
       def update_status
-        fragmenter.complete? ? :accepted : :ok
+        uploader.complete? ? :accepted : :ok
       end
     end
   end
