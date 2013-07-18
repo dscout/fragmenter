@@ -9,6 +9,7 @@ Gem::Specification.new do |gem|
   gem.authors      = ['Parker Selbert']
   gem.email        = ['parker@sorentwo.com']
   gem.homepage     = 'https://github.com/dscout/fragmenter'
+  gem.license      = 'MIT'
   gem.description  = %q{Fragmentize and rebuild data}
   gem.summary      = <<-SUMMARY
     Multipart upload support backed by Redis. Fragmenter handles storing
