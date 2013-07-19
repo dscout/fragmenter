@@ -27,7 +27,7 @@ module Fragmenter
       end
 
       def errors
-        validator_instances.map(&:errors).flatten
+        [validator_instances.map(&:errors), storer.errors].flatten
       end
 
       def complete?

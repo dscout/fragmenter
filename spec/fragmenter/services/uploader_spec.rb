@@ -76,7 +76,7 @@ describe Fragmenter::Services::Uploader do
   end
 
   describe '#errors' do
-    it 'merges the errors from all validators' do
+    it 'merges the errors from all validators and the storer' do
       validator_a = Struct.new(:request) do
         def part?;  true;  end
         def valid?; false; end
@@ -90,9 +90,9 @@ describe Fragmenter::Services::Uploader do
       end
 
       uploader = Uploader.new({}, [validator_a, validator_b])
-      uploader.parts_valid?
+      uploader.storer = double(:storer, errors: ['horrible'])
 
-      expect(uploader.errors).to eq(%w[bad invalid])
+      expect(uploader.errors).to eq(%w[bad invalid horrible])
     end
   end
 end
