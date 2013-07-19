@@ -18,7 +18,10 @@ describe Fragmenter::Validators::ImageValidator do
       fragmenter = double(:fragmenter, complete?: true, rebuild: '01010101')
       request    = Fragmenter::Request.new(fragmenter: fragmenter)
 
-      expect(validator.new(request)).to_not be_valid
+      instance = validator.new(request)
+
+      expect(instance).to_not be_valid
+      expect(instance.errors.length).to be_nonzero
     end
 
     it 'is valid with a body that can be parsed as an image' do

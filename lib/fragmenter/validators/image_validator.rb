@@ -1,10 +1,11 @@
 module Fragmenter
   module Validators
     class ImageValidator
-      attr_reader :request
+      attr_reader :errors, :request
 
       def initialize(request)
         @request = request
+        @errors  = []
       end
 
       def part?
@@ -14,17 +15,27 @@ module Fragmenter
       def valid?
         return true unless fragmenter.complete?
 
-        IO.popen('identify -', 'w', err: '/dev/null', out: '/dev/null') do |io|
-          io << fragmenter.rebuild
+        identifiable = identifiable?
+
+        unless identifiable
+          errors << 'Rebuilt fragments are not a valid image'
         end
 
-        $?.success?
+        identifiable
       end
 
       private
 
       def fragmenter
         request.fragmenter
+      end
+
+      def identifiable?
+        IO.popen('identify -', 'w', err: '/dev/null', out: '/dev/null') do |io|
+          io << fragmenter.rebuild
+        end
+
+        $?.success?
       end
     end
   end
