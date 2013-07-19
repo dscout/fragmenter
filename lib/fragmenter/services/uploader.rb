@@ -16,7 +16,7 @@ module Fragmenter
       end
 
       def store
-        stored    = valid? && storer.store
+        stored    = parts_valid? && storer.store && rebuilt_valid?
         @complete = fragmenter.complete?
 
         if stored && complete?
@@ -34,8 +34,12 @@ module Fragmenter
         !!@complete
       end
 
-      def valid?
-        validator_instances.all?(&:valid?)
+      def parts_valid?
+        validator_instances.select(&:part?).all?(&:valid?)
+      end
+
+      def rebuilt_valid?
+        validator_instances.reject(&:part?).all?(&:valid?)
       end
 
       private

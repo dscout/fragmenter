@@ -10,6 +10,10 @@ module Fragmenter
         @errors  = []
       end
 
+      def part?
+        true
+      end
+
       def valid?
         matches = expected.nil? || expected == calculated
 

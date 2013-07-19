@@ -13,8 +13,12 @@ describe Fragmenter::Services::Uploader do
       expect(uploader.store).to be_true
     end
 
-    it 'does not attempt to store fragments if any validators are invalid' do
+    it 'does not attempt to store fragments if any part validators are invalid' do
       validator = Struct.new(:request) do
+        def part?
+          true
+        end
+
         def valid?
           false
         end
@@ -42,6 +46,25 @@ describe Fragmenter::Services::Uploader do
 
       uploader.store
     end
+
+    it 'does not instruct the resource to rebuild if the full content is invalid' do
+      validator = Struct.new(:request) do
+        def part?;  false; end
+        def valid?; false; end
+      end
+
+      resource   = double(:resource)
+      fragmenter = double(:fragmenter, complete?: true)
+      storer     = double(:storer, store: true)
+      request    = Fragmenter::Request.new(resource: resource, fragmenter: fragmenter)
+      uploader   = Uploader.new(request, [validator])
+
+      uploader.storer = storer
+
+      expect(resource).to_not receive(:rebuild_fragments)
+
+      uploader.store
+    end
   end
 
   describe '#complete?' do
@@ -55,17 +78,19 @@ describe Fragmenter::Services::Uploader do
   describe '#errors' do
     it 'merges the errors from all validators' do
       validator_a = Struct.new(:request) do
+        def part?;  true;  end
         def valid?; false; end
         def errors; ['bad']; end
       end
 
       validator_b = Struct.new(:request) do
+        def part?;  true; end
         def valid?; false; end
         def errors; ['invalid']; end
       end
 
       uploader = Uploader.new({}, [validator_a, validator_b])
-      uploader.valid?
+      uploader.parts_valid?
 
       expect(uploader.errors).to eq(%w[bad invalid])
     end
