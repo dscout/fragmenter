@@ -8,6 +8,7 @@ require 'fragmenter/rails/model'
 require 'fragmenter/services/uploader'
 require 'fragmenter/services/storer'
 require 'fragmenter/validators/checksum_validator'
+require 'fragmenter/validators/image_validator'
 
 module Fragmenter
   class << self
