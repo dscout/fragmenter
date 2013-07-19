@@ -172,8 +172,8 @@ response with an accompanying message and errors:
 ```
 
 As images uploads are a common use-case for fragmented uploading an
-ImageValidator is included, but as one of the defaults. You can control which
-validators are used by overriding the `validators` method within the
+ImageValidator is included, but not as one of the defaults. You can control
+which validators are used by overriding the `validators` method within the
 controller:
 
 ```ruby
@@ -189,8 +189,12 @@ end
 ```
 
 To add a custom validator you must add it at some point in the validator chain.
-A validator can be any class that responds to `valid?` with a boolean value and
-provides a list of errors. See the [ImageValidator][1] for an example validator
-that only performs validation when all fragments are complete.
+A validator can be any class that responds to `valid?`, `part?`, and provides a
+list of errors. See the [ImageValidator][1] for an example validator that only
+performs validation when all fragments are complete.
+
+Note that [ImageMagick][2] is required for the ImageValidator to work, but it
+doesn't require `RMagick` or `MiniMagick`.
 
 [1]:lib/fragmenter/validators/image
+[2]:http://www.imagemagick.org/script/identify.php

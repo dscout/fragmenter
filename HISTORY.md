@@ -1,3 +1,9 @@
+# 1.0.0.rc2
+
+* Make good on the documented `ImageValidator`. The implemented version has no
+  additional gem dependencies, but does rely on ImageMagick for its `identify`
+  command.
+
 # 1.0.0.rc1
 
 * Add modules for easiy integration with Rails controllers and models.
