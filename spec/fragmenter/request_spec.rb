@@ -7,6 +7,11 @@ describe Fragmenter::Request do
       expect(request.body).to eq('blob')
     end
 
+    it 'automaticaly rewinds after reading IO' do
+      request = Fragmenter::Request.new(body: StringIO.new('blob'))
+      expect([request.body, request.body]).to eq(%w[blob blob])
+    end
+
     it 'does not attempt to read the body if it is not IO' do
       request = Fragmenter::Request.new(body: 'blob')
       expect(request.body).to eq('blob')

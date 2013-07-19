@@ -11,7 +11,7 @@ module Fragmenter
 
     def body
       if @body.respond_to?(:read)
-        @body.read
+        @body.read.tap { |_| @body.rewind }
       else
         @body
       end
