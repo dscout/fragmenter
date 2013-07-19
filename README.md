@@ -170,10 +170,11 @@ response with an accompanying message and errors:
   ]
 }
 ```
+
 As images uploads are a common use-case for fragmented uploading an
-ImageValidator is included, but not one of the default validators. You can
-control with validators are used by overriding the `validators` method within
-the controller:
+ImageValidator is included, but as one of the defaults. You can control which
+validators are used by overriding the `validators` method within the
+controller:
 
 ```ruby
 class AvatarUploader < ApplicationController
