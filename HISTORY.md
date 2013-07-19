@@ -1,5 +1,8 @@
 # 1.0.0.rc2
 
+* Automatically rewind IO objects between reads. This fixes the issue of
+  multiple validations preventing storage.
+* Expose storage errors along with validation errors when using the uploader.
 * Make good on the documented `ImageValidator`. The implemented version has no
   additional gem dependencies, but does rely on ImageMagick for its `identify`
   command.
