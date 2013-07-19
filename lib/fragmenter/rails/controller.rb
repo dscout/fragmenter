@@ -2,7 +2,7 @@ module Fragmenter
   module Rails
     module Controller
       def show
-        render json: fragmenter.as_json
+        render json: fragmenter.as_json, status: 200
       end
 
       def update
@@ -11,14 +11,14 @@ module Fragmenter
         else
           render json: {
             message: 'Upload of part failed.', errors: uploader.errors
-          }, status: :unprocessable_entity
+          }, status: 422
         end
       end
 
       def destroy
         fragmenter.clean!
 
-        render nothing: true, status: :no_content
+        render nothing: true, status: 204
       end
 
       private
@@ -37,13 +37,13 @@ module Fragmenter
             resource:   resource,
             fragmenter: fragmenter,
             body:       request.body,
-            headers:    request.headers
+            headers:    request.env
           ), validators
         )
       end
 
       def update_status
-        uploader.complete? ? :accepted : :ok
+        uploader.complete? ? 202 : 200
       end
     end
   end

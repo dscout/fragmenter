@@ -22,7 +22,8 @@ describe Fragmenter::Rails::Controller do
       controller.show
 
       expect(controller).to have_received(:render).with(
-        json: { 'fragments' => [] }
+        json: { 'fragments' => [] },
+        status: 200
       )
     end
   end
@@ -40,7 +41,7 @@ describe Fragmenter::Rails::Controller do
       expect(resource.fragmenter).to have_received(:clean!)
       expect(controller).to have_received(:render).with(
         nothing: true,
-        status: :no_content
+        status: 204
       )
     end
   end
@@ -59,7 +60,7 @@ describe Fragmenter::Rails::Controller do
       expect(uploader).to have_received(:store)
       expect(controller).to have_received(:render).with(
         json: { 'fragments' => [] },
-        status: :ok
+        status: 200
       )
     end
 
@@ -78,7 +79,7 @@ describe Fragmenter::Rails::Controller do
           message: 'Upload of part failed.',
           errors:  []
         },
-        status: :unprocessable_entity
+        status: 422
       )
     end
   end
