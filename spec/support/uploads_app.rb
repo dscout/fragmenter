@@ -15,6 +15,12 @@ class UploadsApp < Sinatra::Base
   end
 
   def render(options)
-    [options[:status], JSON.dump(options[:json])]
+    body = if options[:json]
+      JSON.dump(options[:json])
+    else
+      nil
+    end
+
+    [options[:status], body]
   end
 end
