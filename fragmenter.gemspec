@@ -23,6 +23,6 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'redis', '~> 3.0.0'
   gem.add_development_dependency 'rspec',     '~> 2.14.0'
-  gem.add_development_dependency 'sinatra',   '~> 1.4.3'
   gem.add_development_dependency 'rack-test', '~> 0.6.2'
+  gem.add_development_dependency 'sinatra',   '~> 1.4.3'
 end

@@ -1,53 +1,42 @@
 require 'spec_helper'
 require 'json'
 require 'rack/test'
-require 'sinatra/base'
-
-Resource = Struct.new(:id) do
-  include Fragmenter::Rails::Model
-
-  def rebuild_fragments
-    fragmenter.rebuild && fragmenter.clean!
-  end
-end
-
-class Uploads < Sinatra::Base
-  include Fragmenter::Rails::Controller
-
-  put('/') { update }
-
-  private
-
-  def resource
-    @resource ||= Resource.new(200)
-  end
-
-  def render(options)
-    [options[:status], JSON.dump(options[:json])]
-  end
-end
+require 'support/resource'
+require 'support/uploads_app'
 
 describe 'Uploading Fragments' do
   include Rack::Test::Methods
 
-  before(:all) do
-    Fragmenter.configure do |config|
-      config.logger = Logger.new('/dev/null')
-    end
+  let(:app)      { UploadsApp }
+  let(:resource) { Resource.new(200) }
+
+  around do |example|
+    Fragmenter.logger = Logger.new('/dev/null')
+    example.run
+    Fragmenter.logger = nil
   end
 
-  after(:all) do
-    Fragmenter.configure do |config|
-      config.logger = nil
-    end
-  end
+  it 'Lists uploaded fragments' do
+    get '/'
 
-  def app
-    Uploads
+    expect(last_response.status).to eq(200)
+    expect(decoded_response).to eq('fragments' => [])
+
+    store_fragment(number: 1, total: 2)
+
+    get '/'
+
+    expect(last_response.status).to eq(200)
+    expect(decoded_response).to eq(
+      'content_type' => 'application/octet-stream',
+      'fragments'    => %w[1],
+      'total'        => '2'
+    )
+
+    clean_fragments!
   end
 
   it 'Stores uploaded fragments' do
-    header 'Accept',            'application/json'
     header 'Content-Type',      'image/gif'
     header 'X-Fragment-Number', '1'
     header 'X-Fragment-Total',  '2'
@@ -70,6 +59,16 @@ describe 'Uploading Fragments' do
     expect(decoded_response).to eq('fragments' => [])
   end
 
+  it 'Destroys uploaded fragments' do
+    store_fragment(number: 1, total: 2)
+
+    delete '/'
+
+    expect(last_response.status).to eq(204)
+    expect(last_response.body).to eq('')
+    expect(fragmenter.fragments.length).to be_zero
+  end
+
   private
 
   def file_data(file)
@@ -78,5 +77,25 @@ describe 'Uploading Fragments' do
 
   def decoded_response
     JSON.parse(last_response.body)
+  end
+
+  def fragmenter
+    resource.fragmenter
+  end
+
+  def store_fragment(options = {})
+    number = options[:number]
+    total  = options[:total]
+
+    fragmenter.store(
+      '0101',
+      content_type: 'application/octet-stream',
+      number: number,
+      total:  total
+    )
+  end
+
+  def clean_fragments!
+    resource.fragmenter.clean!
   end
 end
