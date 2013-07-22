@@ -143,6 +143,18 @@ curl -i
 #=> { "content_type": "image/jpeg", "fragments": [1,2], "total": 2 }
 ```
 
+If you need to customize the status codes for partial or complete `PUT`
+requests you can override the `update_status` method within the controller:
+
+```ruby
+private
+
+# Return 201 Created instead of 202 Accepted
+def update_status
+  uploader.complete? ? 201 : 200
+end
+```
+
 ### Validation
 
 Often you will want to be sure that all of the data is being stored without any
