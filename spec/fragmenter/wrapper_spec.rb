@@ -1,4 +1,4 @@
-require 'fragmenter/wrapper'
+require 'fragmenter'
 
 describe Fragmenter::Wrapper do
   let(:object)       { double(:object, id: 1001) }
@@ -39,6 +39,19 @@ describe Fragmenter::Wrapper do
       wrapper.as_json.tap do |json|
         expect(json).to have_key('content_type')
         expect(json).to have_key('fragments')
+      end
+    end
+  end
+
+  describe '#to_io' do
+    it 'wraps the rebuilt data in a Rack::Multipart::UploadedFile compatible IO object' do
+      engine.stub(meta: { 'content_type' => 'image/png' }, rebuild: '0101010')
+
+      wrapper.to_io.tap do |io|
+        expect(io).to be_instance_of(Fragmenter::DummyIO)
+        expect(io.read).to eq('0101010')
+        expect(io.content_type).to eq('image/png')
+        expect(io.original_filename).to eq('dummy.png')
       end
     end
   end

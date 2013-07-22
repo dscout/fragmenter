@@ -1,3 +1,7 @@
+# Unreleased
+
+* Provide a convenience IO wrapper for rebuilt data with `Wrapper#to_io`.
+
 # 1.0.0.rc2
 
 * Automatically rewind IO objects between reads. This fixes the issue of

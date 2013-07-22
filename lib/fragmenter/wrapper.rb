@@ -23,5 +23,11 @@ module Fragmenter
     def as_json
       engine.meta.merge('fragments' => engine.fragments)
     end
+
+    def to_io
+      Fragmenter::DummyIO.new(rebuild).tap do |io|
+        io.content_type = meta['content_type']
+      end
+    end
   end
 end
