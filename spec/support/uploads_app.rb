@@ -4,6 +4,10 @@ require 'sinatra/base'
 class UploadsApp < Sinatra::Base
   include Fragmenter::Rails::Controller
 
+  class << self
+    attr_accessor :resource
+  end
+
   get('/')    { show }
   put('/')    { update }
   delete('/') { destroy }
@@ -11,7 +15,7 @@ class UploadsApp < Sinatra::Base
   private
 
   def resource
-    @resource ||= Resource.new(200)
+    self.class.resource
   end
 
   def render(options)

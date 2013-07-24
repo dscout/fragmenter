@@ -11,9 +11,13 @@ describe 'Uploading Fragments' do
   let(:resource) { Resource.new(200) }
 
   around do |example|
-    Fragmenter.logger = Logger.new('/dev/null')
+    UploadsApp.resource = resource
+    Fragmenter.logger   = Logger.new('/dev/null')
+
     example.run
-    Fragmenter.logger = nil
+
+    Fragmenter.logger   = nil
+    UploadsApp.resource = nil
   end
 
   it 'Lists uploaded fragments' do
