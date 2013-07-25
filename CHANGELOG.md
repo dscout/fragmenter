@@ -1,6 +1,7 @@
-# Unreleased
+# 1.0.0
 
 * Provide a convenience IO wrapper for rebuilt data with `Wrapper#to_io`.
+* Add integration specs for testing against the rack request/response interface
 
 # 1.0.0.rc2
 
