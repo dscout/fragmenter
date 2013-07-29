@@ -7,17 +7,14 @@ require 'support/uploads_app'
 describe 'Uploading Fragments' do
   include Rack::Test::Methods
 
-  let(:app)      { UploadsApp }
   let(:resource) { Resource.new(200) }
+  let(:app)      { UploadsApp.new(resource) }
 
   around do |example|
-    UploadsApp.resource = resource
-    Fragmenter.logger   = Logger.new('/dev/null')
-
+    resource.fragmenter.clean!
+    Fragmenter.logger = Logger.new('/dev/null')
     example.run
-
-    Fragmenter.logger   = nil
-    UploadsApp.resource = nil
+    Fragmenter.logger = nil
   end
 
   it 'Lists uploaded fragments' do

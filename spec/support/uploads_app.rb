@@ -1,30 +1,37 @@
 require 'fragmenter/rails/controller'
-require 'sinatra/base'
+require 'rack/request'
+require 'rack/response'
 
-class UploadsApp < Sinatra::Base
+class UploadsApp
   include Fragmenter::Rails::Controller
 
-  class << self
-    attr_accessor :resource
+  attr_reader :request, :resource
+
+  def initialize(resource)
+    @resource = resource
   end
 
-  get('/')    { show }
-  put('/')    { update }
-  delete('/') { destroy }
+  def call(env)
+    @request = Rack::Request.new(env)
+
+    case request.request_method
+    when 'GET'    then show
+    when 'PUT'    then update
+    when 'DELETE' then destroy
+    end
+  end
 
   private
-
-  def resource
-    self.class.resource
-  end
 
   def render(options)
     body = if options[:json]
       JSON.dump(options[:json])
     else
-      nil
+      ''
     end
 
-    [options[:status], body]
+    Rack::Response.new(body, options[:status], {}).finish do
+      @uploader = nil
+    end
   end
 end
