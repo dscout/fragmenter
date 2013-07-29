@@ -6,7 +6,7 @@ describe Fragmenter::Rails::Controller do
     include Fragmenter::Rails::Controller
   end
 
-  Resource = Struct.new(:id) do
+  resource_class = Struct.new(:id) do
     def fragmenter
       @fragmenter ||= Fragmenter::Wrapper.new(self)
     end
@@ -14,7 +14,7 @@ describe Fragmenter::Rails::Controller do
 
   describe '#show' do
     it 'renders the JSON representation of the associated fragmenter' do
-      resource   = Resource.new(100)
+      resource   = resource_class.new(100)
       controller = UploadController.new(resource)
 
       controller.stub(:render)
@@ -30,7 +30,7 @@ describe Fragmenter::Rails::Controller do
 
   describe '#destroy' do
     it 'commands the fragmenter to clean' do
-      resource   = Resource.new(100)
+      resource   = resource_class.new(100)
       controller = UploadController.new(resource)
 
       controller.stub(:render)
@@ -48,7 +48,7 @@ describe Fragmenter::Rails::Controller do
 
   describe '#update' do
     it 'stores the request body' do
-      resource   = Resource.new(100)
+      resource   = resource_class.new(100)
       controller = UploadController.new(resource)
       uploader   = double(:uploader, store: true, complete?: false)
 
@@ -65,7 +65,7 @@ describe Fragmenter::Rails::Controller do
     end
 
     it 'renders error messages if storage fails' do
-      resource   = Resource.new(100)
+      resource   = resource_class.new(100)
       controller = UploadController.new(resource)
       uploader   = double(:uploader, store: false, errors: [], complete?: false)
 
