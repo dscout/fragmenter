@@ -37,8 +37,8 @@ sub-optimal—particularly when compared to a properly configured Nginx proxy.
 
 ## Requirements
 
-Fragmenter is tested on Ruby 2.0, but any ruby implementation with 1.9 syntax
-should be supported.
+Fragmenter is tested on Ruby 1.9.3, 2.0, and 2.1. However, any ruby
+implementation with 1.9 syntax will be supported.
 
 Redis 2.0 or greater is required and version 2.6 is recommended.
 
