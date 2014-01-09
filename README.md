@@ -20,8 +20,20 @@ pieces is the simplest workaround.
 
 Fragments are intended to be rather small, anywhere from 10-50k depending on
 the underlying data size. There is a balance between connection overhead from
-repeated server calls, being connection error tollerant, and not blocking the
+repeated server calls, being connection error tolerant, and not blocking the
 server from handling other connections.
+
+## Heroku
+
+Due to the way the service queues requests we do **not** recommend using
+Fragmenter for apps on Heroku. Fragmenter is designed to make uploads from slow
+mobile clients easier and fault tolerant. Heroku kills all requests after 30
+seconds from the point where the request started, not from the point where it
+was handed to your application. Fragmenting uploads uses a fair number of
+additional requests and can cause rampant timeout errors (H12 on Heroku).
+
+That isn't to say that Fragmenter just doesn't work on Heroku, it is just
+sub-optimal—particularly when compared to a properly configured Nginx proxy.
 
 ## Requirements
 
