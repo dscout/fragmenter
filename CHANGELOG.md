@@ -1,3 +1,8 @@
+# 1.0.1
+
+* Create a new uploader instance per request, avoiding unexpected caching
+  behavior.
+
 # 1.0.0
 
 * Provide a convenience IO wrapper for rebuilt data with `Wrapper#to_io`.
