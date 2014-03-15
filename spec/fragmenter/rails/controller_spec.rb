@@ -52,8 +52,7 @@ describe Fragmenter::Rails::Controller do
       controller = UploadController.new(resource)
       uploader   = double(:uploader, store: true, complete?: false)
 
-      controller.stub(:render)
-      controller.stub(uploader: uploader)
+      controller.stub(render: true, request_uploader: uploader)
 
       controller.update
 
@@ -69,8 +68,7 @@ describe Fragmenter::Rails::Controller do
       controller = UploadController.new(resource)
       uploader   = double(:uploader, store: false, errors: [], complete?: false)
 
-      controller.stub(:render)
-      controller.stub(uploader: uploader)
+      controller.stub(render: true, request_uploader: uploader)
 
       controller.update
 

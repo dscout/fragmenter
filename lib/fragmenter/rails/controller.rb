@@ -6,8 +6,10 @@ module Fragmenter
       end
 
       def update
+        uploader = request_uploader
+
         if uploader.store
-          render json: fragmenter.as_json, status: update_status
+          render json: fragmenter.as_json, status: update_status(uploader)
         else
           render json: {
             message: 'Upload of part failed.', errors: uploader.errors
@@ -31,8 +33,8 @@ module Fragmenter
         [Fragmenter::Validators::ChecksumValidator]
       end
 
-      def uploader
-        @uploader ||= Fragmenter::Services::Uploader.new(
+      def request_uploader
+        Fragmenter::Services::Uploader.new(
           Fragmenter::Request.new(
             resource:   resource,
             fragmenter: fragmenter,
@@ -42,7 +44,7 @@ module Fragmenter
         )
       end
 
-      def update_status
+      def update_status(uploader)
         uploader.complete? ? 202 : 200
       end
     end
