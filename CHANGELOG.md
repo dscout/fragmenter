@@ -1,3 +1,7 @@
+# 1.0.2
+
+* Loosen the constraint on Redis. Any 3.X release should work.
+
 # 1.0.1
 
 * Create a new uploader instance per request, avoiding unexpected caching
