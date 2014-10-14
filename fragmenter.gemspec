@@ -21,7 +21,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(spec)/})
   gem.require_paths = ['lib']
 
-  gem.add_dependency 'redis', '~> 3.0.0'
+  gem.add_dependency 'redis', '~> 3'
   gem.add_development_dependency 'rspec',     '~> 2.14.0'
   gem.add_development_dependency 'rack',      '~> 1.5.2'
   gem.add_development_dependency 'rack-test', '~> 0.6.2'
